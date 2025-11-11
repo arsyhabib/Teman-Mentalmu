@@ -160,20 +160,7 @@ class MentalHealthScreeningApp:
         
         submit_btn.click(process_quick_screening, inputs=inputs, outputs=[result_output])
     
-    def create_full_assessment(self):
-        """Evaluasi lengkap - FIXED VERSION"""
-        gr.Markdown("## 📋 Evaluasi Lengkap")
-        
-        instrument_choice = gr.Dropdown(
-            choices=[
-                ("PHQ-9 (Depresi)", "phq9"),
-                ("GAD-7 (Kecemasan)", "gad7"),
-                ("DASS-21 (Distress)", "dass21"),
-                ("CBI (Burnout)", "cbi")
-            ],
-            label="Pilih instrumen evaluasi",
-            value="phq9"
-        )
+<class 'gradio.layouts.column.Column'> Component with id 18 not a valid output component.
         
         start_btn = gr.Button("Mulai Evaluasi", variant="primary")
         
