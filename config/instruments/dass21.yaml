@@ -1,0 +1,600 @@
+id: dass21
+title:
+  id: DASS-21
+  en: DASS-21 (Depression Anxiety Stress Scales-21)
+description:
+  id: "21 pertanyaan untuk mengukur tiga aspek distress psikologis"
+  en: "21 questions measuring three aspects of psychological distress"
+timeframe:
+  id: "Dalam 1 minggu terakhir"
+  en: "Over the last week"
+items:
+  # Depression items
+  - id: dass21_d1
+    text:
+      id: "Saya merasa sulit untuk bersemangat tentang sesuatu"
+      en: "I found it hard to wind down"
+    category: depression
+    options:
+      - value: 0
+        label:
+          id: "Tidak pernah"
+          en: "Never"
+      - value: 1
+        label:
+          id: "Kadang-kadang"
+          en: "Sometimes"
+      - value: 2
+        label:
+          id: "Sering"
+          en: "Often"
+      - value: 3
+        label:
+          id: "Hampir selalu"
+          en: "Almost always"
+  - id: dass21_d2
+    text:
+      id: "Saya menyadari bahwa saya tidak memiliki motivasi untuk melakukan apa-apa"
+      en: "I was aware of dryness of my mouth"
+    category: depression
+    options:
+      - value: 0
+        label:
+          id: "Tidak pernah"
+          en: "Never"
+      - value: 1
+        label:
+          id: "Kadang-kadang"
+          en: "Sometimes"
+      - value: 2
+        label:
+          id: "Sering"
+          en: "Often"
+      - value: 3
+        label:
+          id: "Hampir selalu"
+          en: "Almost always"
+  - id: dass21_d3
+    text:
+      id: "Saya sepertinya tidak bisa mengalami perasaan positif sama sekali"
+      en: "I couldn't seem to experience any positive feeling at all"
+    category: depression
+    options:
+      - value: 0
+        label:
+          id: "Tidak pernah"
+          en: "Never"
+      - value: 1
+        label:
+          id: "Kadang-kadang"
+          en: "Sometimes"
+      - value: 2
+        label:
+          id: "Sering"
+          en: "Often"
+      - value: 3
+        label:
+          id: "Hampir selalu"
+          en: "Almost always"
+  - id: dass21_d4
+    text:
+      id: "Saya mengalami kesulitan bernapas"
+      en: "I experienced breathing difficulty"
+    category: depression
+    options:
+      - value: 0
+        label:
+          id: "Tidak pernah"
+          en: "Never"
+      - value: 1
+        label:
+          id: "Kadang-kadang"
+          en: "Sometimes"
+      - value: 2
+        label:
+          id: "Sering"
+          en: "Often"
+      - value: 3
+        label:
+          id: "Hampir selalu"
+          en: "Almost always"
+  - id: dass21_d5
+    text:
+      id: "Saya merasa tidak mampu untuk menjadi antusias"
+      en: "I found it difficult to work up the initiative to do things"
+    category: depression
+    options:
+      - value: 0
+        label:
+          id: "Tidak pernah"
+          en: "Never"
+      - value: 1
+        label:
+          id: "Kadang-kadang"
+          en: "Sometimes"
+      - value: 2
+        label:
+          id: "Sering"
+          en: "Often"
+      - value: 3
+        label:
+          id: "Hampir selalu"
+          en: "Almost always"
+  - id: dass21_d6
+    text:
+      id: "Saya bereaksi berlebihan terhadap situasi"
+      en: "I tended to over-react to situations"
+    category: depression
+    options:
+      - value: 0
+        label:
+          id: "Tidak pernah"
+          en: "Never"
+      - value: 1
+        label:
+          id: "Kadang-kadang"
+          en: "Sometimes"
+      - value: 2
+        label:
+          id: "Sering"
+          en: "Often"
+      - value: 3
+        label:
+          id: "Hampir selalu"
+          en: "Almost always"
+  - id: dass21_d7
+    text:
+      id: "Saya merasa saya tidak berharga"
+      en: "I felt that I was worthless"
+    category: depression
+    options:
+      - value: 0
+        label:
+          id: "Tidak pernah"
+          en: "Never"
+      - value: 1
+        label:
+          id: "Kadang-kadang"
+          en: "Sometimes"
+      - value: 2
+        label:
+          id: "Sering"
+          en: "Often"
+      - value: 3
+        label:
+          id: "Hampir selalu"
+          en: "Almost always"
+  # Anxiety items
+  - id: dass21_a1
+    text:
+      id: "Saya merasa sulit untuk tenang"
+      en: "I found it hard to wind down"
+    category: anxiety
+    options:
+      - value: 0
+        label:
+          id: "Tidak pernah"
+          en: "Never"
+      - value: 1
+        label:
+          id: "Kadang-kadang"
+          en: "Sometimes"
+      - value: 2
+        label:
+          id: "Sering"
+          en: "Often"
+      - value: 3
+        label:
+          id: "Hampir selalu"
+          en: "Almost always"
+  - id: dass21_a2
+    text:
+      id: "Saya sadar mulut saya terasa kering"
+      en: "I was aware of dryness of my mouth"
+    category: anxiety
+    options:
+      - value: 0
+        label:
+          id: "Tidak pernah"
+          en: "Never"
+      - value: 1
+        label:
+          id: "Kadang-kadang"
+          en: "Sometimes"
+      - value: 2
+        label:
+          id: "Sering"
+          en: "Often"
+      - value: 3
+        label:
+          id: "Hampir selalu"
+          en: "Almost always"
+  - id: dass21_a3
+    text:
+      id: "Saya sepertinya tidak bisa mengalami perasaan positif sama sekali"
+      en: "I couldn't seem to experience any positive feeling at all"
+    category: anxiety
+    options:
+      - value: 0
+        label:
+          id: "Tidak pernah"
+          en: "Never"
+      - value: 1
+        label:
+          id: "Kadang-kadang"
+          en: "Sometimes"
+      - value: 2
+        label:
+          id: "Sering"
+          en: "Often"
+      - value: 3
+        label:
+          id: "Hampir selalu"
+          en: "Almost always"
+  - id: dass21_a4
+    text:
+      id: "Saya mengalami kesulitan bernapas"
+      en: "I experienced breathing difficulty"
+    category: anxiety
+    options:
+      - value: 0
+        label:
+          id: "Tidak pernah"
+          en: "Never"
+      - value: 1
+        label:
+          id: "Kadang-kadang"
+          en: "Sometimes"
+      - value: 2
+        label:
+          id: "Sering"
+          en: "Often"
+      - value: 3
+        label:
+          id: "Hampir selalu"
+          en: "Almost always"
+  - id: dass21_a5
+    text:
+      id: "Saya merasa sulit untuk menjadi antusias"
+      en: "I found it difficult to work up the initiative to do things"
+    category: anxiety
+    options:
+      - value: 0
+        label:
+          id: "Tidak pernah"
+          en: "Never"
+      - value: 1
+        label:
+          id: "Kadang-kadang"
+          en: "Sometimes"
+      - value: 2
+        label:
+          id: "Sering"
+          en: "Often"
+      - value: 3
+        label:
+          id: "Hampir selalu"
+          en: "Almost always"
+  - id: dass21_a6
+    text:
+      id: "Saya bereaksi berlebihan terhadap situasi"
+      en: "I tended to over-react to situations"
+    category: anxiety
+    options:
+      - value: 0
+        label:
+          id: "Tidak pernah"
+          en: "Never"
+      - value: 1
+        label:
+          id: "Kadang-kadang"
+          en: "Sometimes"
+      - value: 2
+        label:
+          id: "Sering"
+          en: "Often"
+      - value: 3
+        label:
+          id: "Hampir selalu"
+          en: "Almost always"
+  - id: dass21_a7
+    text:
+      id: "Saya merasa saya tidak berharga"
+      en: "I felt that I was worthless"
+    category: anxiety
+    options:
+      - value: 0
+        label:
+          id: "Tidak pernah"
+          en: "Never"
+      - value: 1
+        label:
+          id: "Kadang-kadang"
+          en: "Sometimes"
+      - value: 2
+        label:
+          id: "Sering"
+          en: "Often"
+      - value: 3
+        label:
+          id: "Hampir selalu"
+          en: "Almost always"
+  # Stress items
+  - id: dass21_s1
+    text:
+      id: "Saya merasa sulit untuk tenang"
+      en: "I found it hard to wind down"
+    category: stress
+    options:
+      - value: 0
+        label:
+          id: "Tidak pernah"
+          en: "Never"
+      - value: 1
+        label:
+          id: "Kadang-kadang"
+          en: "Sometimes"
+      - value: 2
+        label:
+          id: "Sering"
+          en: "Often"
+      - value: 3
+        label:
+          id: "Hampir selalu"
+          en: "Almost always"
+  - id: dass21_s2
+    text:
+      id: "Saya sadar mulut saya terasa kering"
+      en: "I was aware of dryness of my mouth"
+    category: stress
+    options:
+      - value: 0
+        label:
+          id: "Tidak pernah"
+          en: "Never"
+      - value: 1
+        label:
+          id: "Kadang-kadang"
+          en: "Sometimes"
+      - value: 2
+        label:
+          id: "Sering"
+          en: "Often"
+      - value: 3
+        label:
+          id: "Hampir selalu"
+          en: "Almost always"
+  - id: dass21_s3
+    text:
+      id: "Saya sepertinya tidak bisa mengalami perasaan positif sama sekali"
+      en: "I couldn't seem to experience any positive feeling at all"
+    category: stress
+    options:
+      - value: 0
+        label:
+          id: "Tidak pernah"
+          en: "Never"
+      - value: 1
+        label:
+          id: "Kadang-kadang"
+          en: "Sometimes"
+      - value: 2
+        label:
+          id: "Sering"
+          en: "Often"
+      - value: 3
+        label:
+          id: "Hampir selalu"
+          en: "Almost always"
+  - id: dass21_s4
+    text:
+      id: "Saya mengalami kesulitan bernapas"
+      en: "I experienced breathing difficulty"
+    category: stress
+    options:
+      - value: 0
+        label:
+          id: "Tidak pernah"
+          en: "Never"
+      - value: 1
+        label:
+          id: "Kadang-kadang"
+          en: "Sometimes"
+      - value: 2
+        label:
+          id: "Sering"
+          en: "Often"
+      - value: 3
+        label:
+          id: "Hampir selalu"
+          en: "Almost always"
+  - id: dass21_s5
+    text:
+      id: "Saya merasa sulit untuk menjadi antusias"
+      en: "I found it difficult to work up the initiative to do things"
+    category: stress
+    options:
+      - value: 0
+        label:
+          id: "Tidak pernah"
+          en: "Never"
+      - value: 1
+        label:
+          id: "Kadang-kadang"
+          en: "Sometimes"
+      - value: 2
+        label:
+          id: "Sering"
+          en: "Often"
+      - value: 3
+        label:
+          id: "Hampir selalu"
+          en: "Almost always"
+  - id: dass21_s6
+    text:
+      id: "Saya bereaksi berlebihan terhadap situasi"
+      en: "I tended to over-react to situations"
+    category: stress
+    options:
+      - value: 0
+        label:
+          id: "Tidak pernah"
+          en: "Never"
+      - value: 1
+        label:
+          id: "Kadang-kadang"
+          en: "Sometimes"
+      - value: 2
+        label:
+          id: "Sering"
+          en: "Often"
+      - value: 3
+        label:
+          id: "Hampir selalu"
+          en: "Almost always"
+  - id: dass21_s7
+    text:
+      id: "Saya merasa saya tidak berharga"
+      en: "I felt that I was worthless"
+    category: stress
+    options:
+      - value: 0
+        label:
+          id: "Tidak pernah"
+          en: "Never"
+      - value: 1
+        label:
+          id: "Kadang-kadang"
+          en: "Sometimes"
+      - value: 2
+        label:
+          id: "Sering"
+          en: "Often"
+      - value: 3
+        label:
+          id: "Hampir selalu"
+          en: "Almost always"
+scoring:
+  type: sum_by_category
+  categories:
+    depression:
+      items: [dass21_d1, dass21_d2, dass21_d3, dass21_d4, dass21_d5, dass21_d6, dass21_d7]
+      max_score: 21
+      multiplier: 2
+    anxiety:
+      items: [dass21_a1, dass21_a2, dass21_a3, dass21_a4, dass21_a5, dass21_a6, dass21_a7]
+      max_score: 21
+      multiplier: 2
+    stress:
+      items: [dass21_s1, dass21_s2, dass21_s3, dass21_s4, dass21_s5, dass21_s6, dass21_s7]
+      max_score: 21
+      multiplier: 2
+interpretation:
+  depression:
+    - range: [0, 9]
+      label:
+        id: "Normal"
+        en: "Normal"
+      description:
+        id: "Tidak ada gejala depresi yang signifikan"
+        en: "No significant depression symptoms"
+    - range: [10, 13]
+      label:
+        id: "Ringan"
+        en: "Mild"
+      description:
+        id: "Gejala depresi ringan"
+        en: "Mild depression symptoms"
+    - range: [14, 20]
+      label:
+        id: "Sedang"
+        en: "Moderate"
+      description:
+        id: "Gejala depresi sedang"
+        en: "Moderate depression symptoms"
+    - range: [21, 27]
+      label:
+        id: "Berat"
+        en: "Severe"
+      description:
+        id: "Gejala depresi berat"
+        en: "Severe depression symptoms"
+    - range: [28, 42]
+      label:
+        id: "Sangat Berat"
+        en: "Extremely Severe"
+      description:
+        id: "Gejala depresi sangat berat"
+        en: "Extremely severe depression symptoms"
+  anxiety:
+    - range: [0, 7]
+      label:
+        id: "Normal"
+        en: "Normal"
+      description:
+        id: "Tidak ada gejala kecemasan yang signifikan"
+        en: "No significant anxiety symptoms"
+    - range: [8, 9]
+      label:
+        id: "Ringan"
+        en: "Mild"
+      description:
+        id: "Gejala kecemasan ringan"
+        en: "Mild anxiety symptoms"
+    - range: [10, 14]
+      label:
+        id: "Sedang"
+        en: "Moderate"
+      description:
+        id: "Gejala kecemasan sedang"
+        en: "Moderate anxiety symptoms"
+    - range: [15, 19]
+      label:
+        id: "Berat"
+        en: "Severe"
+      description:
+        id: "Gejala kecemasan berat"
+        en: "Severe anxiety symptoms"
+    - range: [20, 42]
+      label:
+        id: "Sangat Berat"
+        en: "Extremely Severe"
+      description:
+        id: "Gejala kecemasan sangat berat"
+        en: "Extremely severe anxiety symptoms"
+  stress:
+    - range: [0, 14]
+      label:
+        id: "Normal"
+        en: "Normal"
+      description:
+        id: "Tidak ada gejala stres yang signifikan"
+        en: "No significant stress symptoms"
+    - range: [15, 18]
+      label:
+        id: "Ringan"
+        en: "Mild"
+      description:
+        id: "Gejala stres ringan"
+        en: "Mild stress symptoms"
+    - range: [19, 25]
+      label:
+        id: "Sedang"
+        en: "Moderate"
+      description:
+        id: "Gejala stres sedang"
+        en: "Moderate stress symptoms"
+    - range: [26, 33]
+      label:
+        id: "Berat"
+        en: "Severe"
+      description:
+        id: "Gejala stres berat"
+        en: "Severe stress symptoms"
+    - range: [34, 42]
+      label:
+        id: "Sangat Berat"
+        en: "Extremely Severe"
+      description:
+        id: "Gejala stres sangat berat"
+        en: "Extremely severe stress symptoms"

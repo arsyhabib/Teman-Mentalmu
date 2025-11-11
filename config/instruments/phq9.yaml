@@ -1,0 +1,262 @@
+id: phq9
+title:
+  id: PHQ-9
+  en: PHQ-9 (Patient Health Questionnaire-9)
+description:
+  id: "Sembilan pertanyaan untuk menilai keparahan gejala depresi"
+  en: "Nine questions to assess depression symptom severity"
+timeframe:
+  id: "Dalam 2 minggu terakhir"
+  en: "Over the last 2 weeks"
+items:
+  - id: phq9_1
+    text:
+      id: "Sedikit minat atau kesenangan dalam melakukan sesuatu"
+      en: "Little interest or pleasure in doing things"
+    options:
+      - value: 0
+        label:
+          id: "Tidak sama sekali"
+          en: "Not at all"
+      - value: 1
+        label:
+          id: "Beberapa hari"
+          en: "Several days"
+      - value: 2
+        label:
+          id: "Lebih dari separuh hari"
+          en: "More than half the days"
+      - value: 3
+        label:
+          id: "Hampir setiap hari"
+          en: "Nearly every day"
+  - id: phq9_2
+    text:
+      id: "Merasa sedih, murung, atau putus asa"
+      en: "Feeling down, depressed, or hopeless"
+    options:
+      - value: 0
+        label:
+          id: "Tidak sama sekali"
+          en: "Not at all"
+      - value: 1
+        label:
+          id: "Beberapa hari"
+          en: "Several days"
+      - value: 2
+        label:
+          id: "Lebih dari separuh hari"
+          en: "More than half the days"
+      - value: 3
+        label:
+          id: "Hampir setiap hari"
+          en: "Nearly every day"
+  - id: phq9_3
+    text:
+      id: "Kesulitan tidur, bangun di malam hari, atau terlalu banyak tidur"
+      en: "Trouble falling or staying asleep, or sleeping too much"
+    options:
+      - value: 0
+        label:
+          id: "Tidak sama sekali"
+          en: "Not at all"
+      - value: 1
+        label:
+          id: "Beberapa hari"
+          en: "Several days"
+      - value: 2
+        label:
+          id: "Lebih dari separuh hari"
+          en: "More than half the days"
+      - value: 3
+        label:
+          id: "Hampir setiap hari"
+          en: "Nearly every day"
+  - id: phq9_4
+    text:
+      id: "Merasa lelah atau kehilangan energi"
+      en: "Feeling tired or having little energy"
+    options:
+      - value: 0
+        label:
+          id: "Tidak sama sekali"
+          en: "Not at all"
+      - value: 1
+        label:
+          id: "Beberapa hari"
+          en: "Several days"
+      - value: 2
+        label:
+          id: "Lebih dari separuh hari"
+          en: "More than half the days"
+      - value: 3
+        label:
+          id: "Hampir setiap hari"
+          en: "Nearly every day"
+  - id: phq9_5
+    text:
+      id: "Nafsu makan rendah atau makan berlebihan"
+      en: "Poor appetite or overeating"
+    options:
+      - value: 0
+        label:
+          id: "Tidak sama sekali"
+          en: "Not at all"
+      - value: 1
+        label:
+          id: "Beberapa hari"
+          en: "Several days"
+      - value: 2
+        label:
+          id: "Lebih dari separuh hari"
+          en: "More than half the days"
+      - value: 3
+        label:
+          id: "Hampir setiap hari"
+          en: "Nearly every day"
+  - id: phq9_6
+    text:
+      id: "Merasa buruk tentang diri sendiri atau merasa gagal"
+      en: "Feeling bad about yourself or that you are a failure"
+    options:
+      - value: 0
+        label:
+          id: "Tidak sama sekali"
+          en: "Not at all"
+      - value: 1
+        label:
+          id: "Beberapa hari"
+          en: "Several days"
+      - value: 2
+        label:
+          id: "Lebih dari separuh hari"
+          en: "More than half the days"
+      - value: 3
+        label:
+          id: "Hampir setiap hari"
+          en: "Nearly every day"
+  - id: phq9_7
+    text:
+      id: "Kesulitan berkonsentrasi pada sesuatu"
+      en: "Trouble concentrating on things"
+    options:
+      - value: 0
+        label:
+          id: "Tidak sama sekali"
+          en: "Not at all"
+      - value: 1
+        label:
+          id: "Beberapa hari"
+          en: "Several days"
+      - value: 2
+        label:
+          id: "Lebih dari separuh hari"
+          en: "More than half the days"
+      - value: 3
+        label:
+          id: "Hampir setiap hari"
+          en: "Nearly every day"
+  - id: phq9_8
+    text:
+      id: "Bergerak atau berbicara sangat lambat, atau gelisah dan tidak bisa diam"
+      en: "Moving or speaking slowly, or being fidgety or restless"
+    options:
+      - value: 0
+        label:
+          id: "Tidak sama sekali"
+          en: "Not at all"
+      - value: 1
+        label:
+          id: "Beberapa hari"
+          en: "Several days"
+      - value: 2
+        label:
+          id: "Lebih dari separuh hari"
+          en: "More than half the days"
+      - value: 3
+        label:
+          id: "Hampir setiap hari"
+          en: "Nearly every day"
+  - id: phq9_9
+    text:
+      id: "Pikiran untuk menyakiti diri sendiri atau berpikir lebih baik mati"
+      en: "Thoughts of hurting yourself or that you would be better off dead"
+    options:
+      - value: 0
+        label:
+          id: "Tidak sama sekali"
+          en: "Not at all"
+      - value: 1
+        label:
+          id: "Beberapa hari"
+          en: "Several days"
+      - value: 2
+        label:
+          id: "Lebih dari separuh hari"
+          en: "More than half the days"
+      - value: 3
+        label:
+          id: "Hampir setiap hari"
+          en: "Nearly every day"
+  - id: phq9_impairment
+    text:
+      id: "Jika Anda mencentang masalah apa pun, seberapa sulitkah masalah ini membuat Anda melakukan pekerjaan, mengurus rumah, atau bergaul dengan orang lain?"
+      en: "If you checked off any problems, how difficult have these problems made it for you to do your work, take care of things at home, or get along with other people?"
+    options:
+      - value: 0
+        label:
+          id: "Tidak sulit sama sekali"
+          en: "Not difficult at all"
+      - value: 1
+        label:
+          id: "Sedikit sulit"
+          en: "Somewhat difficult"
+      - value: 2
+        label:
+          id: "Sangat sulit"
+          en: "Very difficult"
+      - value: 3
+        label:
+          id: "Sangat sulit sekali"
+          en: "Extremely difficult"
+scoring:
+  type: sum
+  items: [phq9_1, phq9_2, phq9_3, phq9_4, phq9_5, phq9_6, phq9_7, phq9_8, phq9_9]
+  max_score: 27
+  suicide_item: phq9_9
+interpretation:
+  - range: [0, 4]
+    label:
+      id: "Minimal"
+      en: "Minimal depression"
+    description:
+      id: "Gejala depresi minimal atau tidak ada"
+      en: "Minimal or no depression symptoms"
+  - range: [5, 9]
+    label:
+      id: "Ringan"
+      en: "Mild depression"
+    description:
+      id: "Gejala depresi ringan"
+      en: "Mild depression symptoms"
+  - range: [10, 14]
+    label:
+      id: "Sedang"
+      en: "Moderate depression"
+    description:
+      id: "Gejala depresi sedang"
+      en: "Moderate depression symptoms"
+  - range: [15, 19]
+    label:
+      id: "Sedang-Berat"
+      en: "Moderately severe depression"
+    description:
+      id: "Gejala depresi sedang sampai berat"
+      en: "Moderately severe depression symptoms"
+  - range: [20, 27]
+    label:
+      id: "Berat"
+      en: "Severe depression"
+    description:
+      id: "Gejala depresi berat"
+      en: "Severe depression symptoms"

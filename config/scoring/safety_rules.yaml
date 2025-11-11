@@ -1,0 +1,114 @@
+safety:
+  suicide_screening:
+    instruments:
+      - id: phq9
+        item: phq9_9
+        threshold: 1
+        message:
+          id: "Peringatan Keamanan: Anda melaporkan pikiran untuk menyakiti diri sendiri"
+          en: "Safety Alert: You reported thoughts of self-harm"
+        action: "immediate_intervention"
+      
+      - id: phq9
+        item: phq9_impairment
+        threshold: 2
+        message:
+          id: "Peringatan: Anda melaporkan kesulitan signifikan dalam fungsi sehari-hari"
+          en: "Alert: You reported significant difficulty in daily functioning"
+        action: "assess_depression_severity"
+  
+  risk_factors:
+    high_risk_indicators:
+      - item: "phq9_9 > 0"
+        weight: 0.8
+        description:
+          id: "Pikiran menyakiti diri sendiri"
+          en: "Self-harm thoughts"
+      - item: "phq9_total >= 20"
+        weight: 0.6
+        description:
+          id: "Skor depresi berat"
+          en: "Severe depression score"
+      - item: "phq9_impairment >= 2"
+        weight: 0.4
+        description:
+          id: "Gangguan fungsi berat"
+          en: "Severe functional impairment"
+    
+    moderate_risk_indicators:
+      - item: "phq9_total >= 15"
+        weight: 0.5
+        description:
+          id: "Skor depresi sedang-berat"
+          en: "Moderately severe depression score"
+      - item: "phq9_impairment >= 1"
+        weight: 0.3
+        description:
+          id: "Gangguan fungsi sedang"
+          en: "Moderate functional impairment"
+  
+  interventions:
+    immediate:
+      - action: "crisis_hotline"
+        description:
+          id: "Hubungi layanan krisis segera"
+          en: "Contact crisis services immediately"
+        resources:
+          - name: "Lifeline Indonesia"
+            number: "021-85203010"
+          - name: "Emergency Services"
+            number: "112"
+      
+      - action: "professional_referral"
+        description:
+          id: "Cari bantuan profesional segera"
+          en: "Seek professional help immediately"
+        resources:
+          - type: "psychiatrist"
+          - type: "clinical_psychologist"
+          - type: "emergency_department"
+    
+    urgent:
+      - action: "schedule_appointment"
+        timeframe: "24_hours"
+        description:
+          id: "Jadwalkan konsultasi dalam 24 jam"
+          en: "Schedule consultation within 24 hours"
+      
+      - action: "safety_planning"
+        description:
+          id: "Buat rencana keselamatan"
+          en: "Create safety plan"
+    
+    routine:
+      - action: "monitor_symptoms"
+        frequency: "weekly"
+        description:
+          id: "Pantau gejala setiap minggu"
+          en: "Monitor symptoms weekly"
+      
+      - action: "self_care_strategies"
+        description:
+          id: "Terapkan strategi perawatan diri"
+          en: "Implement self-care strategies"
+  
+  escalation_protocol:
+    - condition: "phq9_9 > 0"
+      priority: "immediate"
+      actions: ["crisis_hotline", "professional_referral"]
+    
+    - condition: "phq9_total >= 20"
+      priority: "urgent"
+      actions: ["professional_referral", "safety_planning"]
+    
+    - condition: "phq9_total >= 15"
+      priority: "high"
+      actions: ["schedule_appointment", "monitor_symptoms"]
+    
+    - condition: "phq9_total >= 10"
+      priority: "moderate"
+      actions: ["monitor_symptoms", "self_care_strategies"]
+    
+    - condition: "default"
+      priority: "low"
+      actions: ["routine_monitoring"]

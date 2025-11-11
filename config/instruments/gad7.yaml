@@ -1,0 +1,191 @@
+id: gad7
+title:
+  id: GAD-7
+  en: GAD-7 (Generalized Anxiety Disorder-7)
+description:
+  id: "Tujuh pertanyaan untuk menilai keparahan gejala kecemasan"
+  en: "Seven questions to assess anxiety symptom severity"
+timeframe:
+  id: "Dalam 2 minggu terakhir"
+  en: "Over the last 2 weeks"
+items:
+  - id: gad7_1
+    text:
+      id: "Merasa gugup, gelisah, atau tegang"
+      en: "Feeling nervous, anxious, or on edge"
+    options:
+      - value: 0
+        label:
+          id: "Tidak sama sekali"
+          en: "Not at all"
+      - value: 1
+        label:
+          id: "Beberapa hari"
+          en: "Several days"
+      - value: 2
+        label:
+          id: "Lebih dari separuh hari"
+          en: "More than half the days"
+      - value: 3
+        label:
+          id: "Hampir setiap hari"
+          en: "Nearly every day"
+  - id: gad7_2
+    text:
+      id: "Tidak bisa berhenti mengkhawatirkan atau merasa sulit mengendalikan kekhawatiran"
+      en: "Not being able to stop or control worrying"
+    options:
+      - value: 0
+        label:
+          id: "Tidak sama sekali"
+          en: "Not at all"
+      - value: 1
+        label:
+          id: "Beberapa hari"
+          en: "Several days"
+      - value: 2
+        label:
+          id: "Lebih dari separuh hari"
+          en: "More than half the days"
+      - value: 3
+        label:
+          id: "Hampir setiap hari"
+          en: "Nearly every day"
+  - id: gad7_3
+    text:
+      id: "Mengkhawatirkan berbagai hal"
+      en: "Worrying too much about different things"
+    options:
+      - value: 0
+        label:
+          id: "Tidak sama sekali"
+          en: "Not at all"
+      - value: 1
+        label:
+          id: "Beberapa hari"
+          en: "Several days"
+      - value: 2
+        label:
+          id: "Lebih dari separuh hari"
+          en: "More than half the days"
+      - value: 3
+        label:
+          id: "Hampir setiap hari"
+          en: "Nearly every day"
+  - id: gad7_4
+    text:
+      id: "Kesulitan untuk santai"
+      en: "Trouble relaxing"
+    options:
+      - value: 0
+        label:
+          id: "Tidak sama sekali"
+          en: "Not at all"
+      - value: 1
+        label:
+          id: "Beberapa hari"
+          en: "Several days"
+      - value: 2
+        label:
+          id: "Lebih dari separuh hari"
+          en: "More than half the days"
+      - value: 3
+        label:
+          id: "Hampir setiap hari"
+          en: "Nearly every day"
+  - id: gad7_5
+    text:
+      id: "Sangat gelisah sehingga sulit untuk duduk diam"
+      en: "Being so restless that it is hard to sit still"
+    options:
+      - value: 0
+        label:
+          id: "Tidak sama sekali"
+          en: "Not at all"
+      - value: 1
+        label:
+          id: "Beberapa hari"
+          en: "Several days"
+      - value: 2
+        label:
+          id: "Lebih dari separuh hari"
+          en: "More than half the days"
+      - value: 3
+        label:
+          id: "Hampir setiap hari"
+          en: "Nearly every day"
+  - id: gad7_6
+    text:
+      id: "Mudah terganggu atau kesal"
+      en: "Becoming easily annoyed or irritable"
+    options:
+      - value: 0
+        label:
+          id: "Tidak sama sekali"
+          en: "Not at all"
+      - value: 1
+        label:
+          id: "Beberapa hari"
+          en: "Several days"
+      - value: 2
+        label:
+          id: "Lebih dari separuh hari"
+          en: "More than half the days"
+      - value: 3
+        label:
+          id: "Hampir setiap hari"
+          en: "Nearly every day"
+  - id: gad7_7
+    text:
+      id: "Merasa takut seolah-olah sesuatu yang buruk akan terjadi"
+      en: "Feeling afraid, as if something awful might happen"
+    options:
+      - value: 0
+        label:
+          id: "Tidak sama sekali"
+          en: "Not at all"
+      - value: 1
+        label:
+          id: "Beberapa hari"
+          en: "Several days"
+      - value: 2
+        label:
+          id: "Lebih dari separuh hari"
+          en: "More than half the days"
+      - value: 3
+        label:
+          id: "Hampir setiap hari"
+          en: "Nearly every day"
+scoring:
+  type: sum
+  items: [gad7_1, gad7_2, gad7_3, gad7_4, gad7_5, gad7_6, gad7_7]
+  max_score: 21
+interpretation:
+  - range: [0, 4]
+    label:
+      id: "Minimal"
+      en: "Minimal anxiety"
+    description:
+      id: "Gejala kecemasan minimal atau tidak ada"
+      en: "Minimal or no anxiety symptoms"
+  - range: [5, 9]
+    label:
+      id: "Ringan"
+      en: "Mild anxiety"
+    description:
+      id: "Gejala kecemasan ringan"
+      en: "Mild anxiety symptoms"
+  - range: [10, 14]
+    label:
+      id: "Sedang"
+      en: "Moderate anxiety"
+    description:
+      id: "Gejala kecemasan sedang"
+      en: "Moderate anxiety symptoms"
+  - range: [15, 21]
+    label:
+      id: "Berat"
+      en: "Severe anxiety"
+    description:
+      id: "Gejala kecemasan berat"
+      en: "Severe anxiety symptoms"

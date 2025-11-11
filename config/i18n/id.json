@@ -1,0 +1,159 @@
+{
+  "app": {
+    "title": "Screening Kesehatan Jiwa",
+    "subtitle": "Alat Skrining Depresi, Kecemasan, dan Burnout",
+    "description": "Platform screening kesehatan jiwa berbasis bukti dengan interpretasi multi-standar dan fitur keselamatan"
+  },
+  "navigation": {
+    "quick_screening": "Skrining Cepat",
+    "full_assessment": "Evaluasi Lengkap",
+    "panic_assistant": "Asisten Panik",
+    "results": "Hasil",
+    "education": "Edukasi",
+    "about": "Tentang"
+  },
+  "common": {
+    "start": "Mulai",
+    "continue": "Lanjutkan",
+    "back": "Kembali",
+    "next": "Selanjutnya",
+    "submit": "Kirim",
+    "cancel": "Batal",
+    "save": "Simpan",
+    "download": "Unduh",
+    "print": "Cetak",
+    "share": "Bagikan",
+    "language": "Bahasa",
+    "help": "Bantuan",
+    "emergency": "Darurat"
+  },
+  "screening": {
+    "quick_mode": {
+      "title": "Skrining Cepat PHQ-2",
+      "description": "Dua pertanyaan cepat untuk skrining depresi",
+      "instruction": "Jawab pertanyaan berikut berdasarkan pengalaman Anda dalam 2 minggu terakhir",
+      "time_estimate": "Waktu: 1 menit"
+    },
+    "full_mode": {
+      "title": "Evaluasi Lengkap",
+      "description": "Evaluasi menyeluruh menggunakan instrumen terstandarisasi",
+      "instruments": {
+        "phq9": "PHQ-9 (Depresi)",
+        "gad7": "GAD-7 (Kecemasan)",
+        "dass21": "DASS-21 (Distress)",
+        "cbi": "CBI (Burnout)"
+      },
+      "instruction": "Pilih instrumen yang sesuai dengan kebutuhan Anda",
+      "time_estimate": "Waktu: 5-15 menit"
+    }
+  },
+  "results": {
+    "title": "Hasil Screening",
+    "interpretation": "Interpretasi",
+    "severity": "Keparahan",
+    "score": "Skor",
+    "risk_level": "Tingkat Risiko",
+    "recommendations": "Rekomendasi",
+    "next_steps": "Langkah Selanjutnya",
+    "monitoring": "Pemantauan",
+    "follow_up": "Tindak Lanjut"
+  },
+  "safety": {
+    "crisis_alert": "Peringatan Krisis",
+    "immediate_help": "Bantuan Segera",
+    "emergency_contacts": "Kontak Darurat",
+    "safety_planning": "Rencana Keselamatan",
+    "professional_help": "Bantuan Profesional",
+    "crisis_hotline": "Layanan Krisis",
+    "emergency_services": "Layanan Darurat",
+    "resources": {
+      "lifeline_indonesia": "Lifeline Indonesia",
+      "emergency_services": "Layanan Darurat",
+      "mental_health_professional": "Profesional Kesehatan Mental"
+    },
+    "messages": {
+      "suicide_ideation": "Anda melaporkan pikiran untuk menyakiti diri sendiri. Ini memerlukan perhatian segera.",
+      "severe_symptoms": "Gejala yang Anda alami cukup berat dan memerlukan evaluasi profesional.",
+      "functional_impairment": "Gangguan fungsi yang Anda alami signifikan dan memerlukan perhatian."
+    }
+  },
+  "panic_assistant": {
+    "title": "Asisten Serangan Panik",
+    "description": "Teknik untuk mengatasi serangan panik dan kecemasan akut",
+    "breathing": {
+      "title": "Teknik Pernapasan",
+      "box_breathing": "Pernapasan Kotak (4-4-4-4)",
+      "four_seven_eight": "4-7-8 Breathing",
+      "deep_breathing": "Pernapasan Dalam"
+    },
+    "grounding": {
+      "title": "Teknik Grounding",
+      "five_four_three_two_one": "5-4-3-2-1 Grounding",
+      "description": "Gunakan indera Anda untuk kembali ke saat ini"
+    },
+    "instructions": {
+      "start_breathing": "Klik tombol di bawah untuk memulai latihan pernapasan",
+      "follow_guide": "Ikuti panduan visual dan audio",
+      "grounding_exercise": "Lakukan latihan grounding untuk menguransi kecemasan"
+    }
+  },
+  "risk_calculator": {
+    "title": "Kalkulator Risiko Depresi",
+    "description": "Estimasi risiko berdasarkan faktor-faktor yang diketahui",
+    "factors": {
+      "family_history": "Riwayat keluarga depresi",
+      "previous_episodes": "Episode depresi sebelumnya",
+      "duration": "Durasi gejala ≥2 minggu",
+      "sleep_problems": "Masalah tidur",
+      "stress_level": "Tingkat stres",
+      "social_support": "Dukungan sosial",
+      "substance_use": "Penggunaan zat",
+      "physical_activity": "Aktivitas fisik",
+      "life_events": "Kejadian hidup besar"
+    },
+    "risk_levels": {
+      "low": "Risiko Rendah",
+      "moderate": "Risiko Sedang",
+      "high": "Risiko Tinggi"
+    }
+  },
+  "education": {
+    "title": "Edukasi Kesehatan Mental",
+    "depression": {
+      "title": "Depresi",
+      "definition": "Depresi adalah gangguan suasana perasaan yang ditandai oleh perasaan sedih yang terus-menerus dan kehilangan minat",
+      "symptoms": "Gejala depresi meliputi perasaan sedih, kehilangan energi, gangguan tidur, dan kesulitan berkonsentrasi",
+      "treatment": "Depresi dapat diobati dengan terapi, obat-obatan, atau kombinasi keduanya"
+    },
+    "anxiety": {
+      "title": "Kecemasan",
+      "definition": "Kecemasan adalah respons normal terhadap stres, tetapi dapat menjadi gangguan jika berlebihan",
+      "symptoms": "Gejala kecemasan meliputi kekhawatiran berlebihan, gelisah, dan gejala fisik seperti detak jantung cepat",
+      "treatment": "Kecemasan dapat diobati dengan terapi, teknik relaksasi, dan obat-obatan"
+    },
+    "burnout": {
+      "title": "Burnout",
+      "definition": "Burnout adalah keadaan kelelahan emosional, mental, dan fisik yang disebabkan oleh stres berkepanjangan",
+      "symptoms": "Gejala burnout meliputi kelelahan kronis, sinisme, dan perasaan tidak berhasil",
+      "prevention": "Burnout dapat dicegah dengan manajemen stres, istirahat yang cukup, dan dukungan sosial"
+    }
+  },
+  "disclaimer": {
+    "title": "Penafian",
+    "content": "Alat ini untuk tujuan edukatif dan skrining saja. Ini tidak menggantikan evaluasi profesional. Jika Anda mengalami krisis, hubungi layanan darurat segera.",
+    "professional_help": "Selalu konsultasikan dengan profesional kesehatan mental untuk diagnosis dan perawatan yang tepat.",
+    "privacy": "Semua data diproses secara lokal di perangkat Anda. Kami tidak menyimpan atau mengirim informasi pribadi Anda."
+  },
+  "consent": {
+    "title": "Persetujuan Pengguna",
+    "understanding": "Saya memahami bahwa:",
+    "points": [
+      "Alat ini untuk tujuan skrining dan edukasi saja",
+      "Hasil tidak menggantikan evaluasi profesional",
+      "Saya harus mencari bantuan profesional jika mengalami krisis",
+      "Semua data diproses secara lokal dan tidak disimpan"
+    ],
+    "agree": "Saya setuju dengan syarat dan ketentuan",
+    "continue": "Lanjutkan ke screening"
+  }
+}
