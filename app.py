@@ -551,10 +551,8 @@ if __name__ == "__main__":
     port = int(os.environ.get("PORT", 7860))
     
     interface.launch(
-        server_name="0.0.0.0",
-        server_port=port,
-        share=False,
-        show_error=True,
-        enable_queue=True,
-        max_threads=10
-    )
+    server_name="0.0.0.0",
+    server_port=port,
+    share=False,
+    show_error=True
+)
