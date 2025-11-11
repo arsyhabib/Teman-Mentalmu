@@ -1,3 +1,5 @@
+# KODE BERSIH - SALIN DARI SINI
+
 import gradio as gr
 import yaml
 import json
@@ -6,7 +8,6 @@ from typing import Dict, List, Any
 from datetime import datetime
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
-import io
 import tempfile
 
 class MentalHealthScreeningApp:
@@ -22,75 +23,93 @@ class MentalHealthScreeningApp:
         scoring_dir = "config/scoring"
         i18n_dir = "config/i18n"
         
-        # Load instruments
+        os.makedirs(instruments_dir, exist_ok=True)
+        os.makedirs(scoring_dir, exist_ok=True)
+        os.makedirs(i18n_dir, exist_ok=True)
+        
         if os.path.exists(instruments_dir):
             for filename in os.listdir(instruments_dir):
                 if filename.endswith('.yaml'):
-                    with open(f"{instruments_dir}/{filename}", 'r', encoding='utf-8') as f:
-                        config = yaml.safe_load(f)
-                        self.instruments[config['id']] = config
+                    try:
+                        with open(f"{instruments_dir}/{filename}", 'r', encoding='utf-8') as f:
+                            config = yaml.safe_load(f)
+                            if config and 'id' in config:
+                                self.instruments[config['id']] = config
+                    except Exception as e:
+                        print(f"Warning: Could not load {filename}: {e}")
         
-        # Load scoring configs
         if os.path.exists(scoring_dir):
             for filename in os.listdir(scoring_dir):
                 if filename.endswith('.yaml'):
-                    with open(f"{scoring_dir}/{filename}", 'r', encoding='utf-8') as f:
-                        config = yaml.safe_load(f)
-                        self.scoring_configs.update(config)
+                    try:
+                        with open(f"{scoring_dir}/{filename}", 'r', encoding='utf-8') as f:
+                            config = yaml.safe_load(f)
+                            if config:
+                                self.scoring_configs.update(config)
+                    except Exception as e:
+                        print(f"Warning: Could not load {filename}: {e}")
         
-        # Load translations
         if os.path.exists(i18n_dir):
             for filename in os.listdir(i18n_dir):
                 if filename.endswith('.json'):
-                    lang = filename.split('.')[0]
-                    with open(f"{i18n_dir}/{filename}", 'r', encoding='utf-8') as f:
-                        self.i18n[lang] = json.load(f)
+                    try:
+                        lang = filename.split('.')[0]
+                        with open(f"{i18n_dir}/{filename}", 'r', encoding='utf-8') as f:
+                            self.i18n[lang] = json.load(f)
+                    except Exception as e:
+                        print(f"Warning: Could not load {filename}: {e}")
     
     def calculate_score(self, instrument_id: str, responses: Dict[str, int]) -> Dict[str, Any]:
-        instrument = self.instruments[instrument_id]
+        instrument = self.instruments.get(instrument_id, {})
         scoring = instrument.get('scoring', {})
         
         if scoring.get('type') == 'sum':
-            total = sum(responses.get(item, 0) for item in scoring['items'])
-            return {'total': total, 'max_score': scoring['max_score']}
+            total = sum(responses.get(item, 0) for item in scoring.get('items', []))
+            return {'total': total, 'max_score': scoring.get('max_score', 0)}
         
         elif scoring.get('type') == 'sum_by_category':
             results = {}
-            for category, config in scoring['categories'].items():
-                category_score = sum(responses.get(item, 0) for item in config['items'])
+            for category, config in scoring.get('categories', {}).items():
+                category_score = sum(responses.get(item, 0) for item in config.get('items', []))
                 if 'multiplier' in config:
                     category_score *= config['multiplier']
                 results[category] = {
                     'score': category_score,
-                    'max_score': config['max_score']
+                    'max_score': config.get('max_score', 0)
                 }
             return results
         
         return {}
     
     def get_interpretation(self, instrument_id: str, score: Any) -> Dict[str, Any]:
-        instrument = self.instruments[instrument_id]
-        interpretation = instrument.get('interpretation', {})
+        instrument = self.instruments.get(instrument_id, {})
+        interpretation = instrument.get('interpretation', [])
         
         if isinstance(score, dict) and 'total' in score:
             total_score = score['total']
             for band in interpretation:
-                if band['range'][0] <= total_score <= band['range'][1]:
-                    return band
+                if isinstance(band, dict) and 'range' in band:
+                    if band['range'][0] <= total_score <= band['range'][1]:
+                        return band
         
         elif isinstance(score, dict):
             results = {}
             for category, cat_score in score.items():
                 if category in interpretation:
                     for band in interpretation[category]:
-                        if band['range'][0] <= cat_score['score'] <= band['range'][1]:
-                            results[category] = band
-                            break
+                        if isinstance(band, dict) and 'range' in band:
+                            if band['range'][0] <= cat_score['score'] <= band['range'][1]:
+                                results[category] = band
+                                break
             return results
         
         return {}
     
     def create_quick_screening(self):
+        if 'phq2' not in self.instruments:
+            gr.Markdown("⚠️ Konfigurasi PHQ-2 tidak ditemukan!")
+            return
+            
         instrument = self.instruments['phq2']
         gr.Markdown(f"## {instrument['title']['id']}")
         gr.Markdown(f"*{instrument['description']['id']}*")
@@ -98,10 +117,10 @@ class MentalHealthScreeningApp:
         
         item_ids = []
         inputs = []
-        for item in instrument['items']:
+        for item in instrument.get('items', []):
             item_ids.append(item['id'])
             inputs.append(gr.Radio(
-                choices=[(opt['label']['id'], opt['value']) for opt in item['options']],
+                choices=[(opt['label']['id'], opt['value']) for opt in item.get('options', [])],
                 label=item['text']['id']
             ))
         
@@ -142,7 +161,7 @@ class MentalHealthScreeningApp:
         submit_btn.click(process_quick_screening, inputs=inputs, outputs=[result_output])
     
     def create_full_assessment(self):
-        """Evaluasi lengkap yang benar-benar fungsional"""
+        """Evaluasi lengkap - FIXED VERSION"""
         gr.Markdown("## 📋 Evaluasi Lengkap")
         
         instrument_choice = gr.Dropdown(
@@ -158,9 +177,9 @@ class MentalHealthScreeningApp:
         
         start_btn = gr.Button("Mulai Evaluasi", variant="primary")
         
-        # Dynamic form container
+        # Container untuk form dinamis
         with gr.Column() as form_container:
-            form_blocks = []
+            dynamic_inputs = []
             item_ids_state = gr.State([])
             current_instrument_state = gr.State("")
         
@@ -169,7 +188,7 @@ class MentalHealthScreeningApp:
         pdf_download = gr.File(label="Download Hasil PDF", visible=False)
         
         def generate_form(instrument_id):
-            if not instrument_id:
+            if not instrument_id or instrument_id not in self.instruments:
                 return [], [], "", gr.update(visible=False), "", None
             
             instrument = self.instruments[instrument_id]
@@ -179,24 +198,15 @@ class MentalHealthScreeningApp:
             components.append(gr.Markdown(f"### {instrument['title']['id']}"))
             components.append(gr.Markdown(f"<p style='color: #7f8c8d;'>{instrument['description']['id']}</p>"))
             
-            for item in instrument['items']:
+            for item in instrument.get('items', []):
                 item_ids.append(item['id'])
                 components.append(gr.Radio(
-                    choices=[(opt['label']['id'], opt['value']) for opt in item['options']],
+                    choices=[(opt['label']['id'], opt['value']) for opt in item.get('options', [])],
                     label=item['text']['id']
                 ))
             
             components.append(gr.Markdown("<br>"))
             return components, item_ids, instrument_id, gr.update(visible=True), "", None
-        
-        # REFACTOR: Bind inputs secara dinamis
-        def bind_submit_button():
-            # Ambil semua komponen radio yang ada di form_container
-            submit_btn.click(
-                process_full_assessment,
-                inputs=[item_ids_state, current_instrument_state],
-                outputs=[results_output, pdf_download]
-            )
         
         start_btn.click(
             generate_form,
@@ -206,18 +216,17 @@ class MentalHealthScreeningApp:
         
         def process_full_assessment(item_ids, current_instrument, *values):
             if not item_ids or not current_instrument:
-                return "<p style='color: #e74c3c;'>⚠️ Form belum diisi lengkap!</p>", None
+                return "<p style='color: #e74c3c;'>⚠️ Form belum diisi lengkap!</p>", gr.update(visible=False)
             
-            # Pastikan semua jawaban terisi
             if len(values) < len(item_ids) or not all(v is not None for v in values[:len(item_ids)]):
-                return "<p style='color: #e74c3c;'>⚠️ Lengkapi semua pertanyaan terlebih dahulu!</p>", None
+                return "<p style='color: #e74c3c;'>⚠️ Lengkapi semua pertanyaan terlebih dahulu!</p>", gr.update(visible=False)
             
             responses_dict = dict(zip(item_ids, values[:len(item_ids)]))
             score = self.calculate_score(current_instrument, responses_dict)
             interpretation = self.get_interpretation(current_instrument, score)
             
             if not interpretation:
-                return "<p style='color: #e74c3c;'>⚠️ Error dalam perhitungan interpretasi!</p>", None
+                return "<p style='color: #e74c3c;'>⚠️ Error dalam interpretasi hasil!</p>", gr.update(visible=False)
             
             pdf_buffer = self.generate_pdf_report(current_instrument, score, interpretation, responses_dict)
             
@@ -230,29 +239,40 @@ class MentalHealthScreeningApp:
                     <p style='color: #155724;'>{interpretation['description']['id']}</p>
                 </div>
             """
-            return html, pdf_buffer
+            return html, gr.update(value=pdf_buffer, visible=True)
+        
+        # Bind submit button
+        submit_btn.click(
+            process_full_assessment,
+            inputs=[item_ids_state, current_instrument_state],
+            outputs=[results_output, pdf_download]
+        )
     
     def generate_pdf_report(self, instrument_id: str, score: Dict, interpretation: Dict, responses: Dict) -> str:
-        """Generate PDF report and return file path"""
-        instrument = self.instruments[instrument_id]
+        """Generate PDF report"""
+        instrument = self.instruments.get(instrument_id, {})
         
         with tempfile.NamedTemporaryFile(mode='wb', suffix='.pdf', delete=False) as tmp_file:
             with PdfPages(tmp_file) as pdf:
-                # Page 1: Summary
+                # Page 1
                 fig, ax = plt.subplots(figsize=(8.27, 11.69))
                 ax.axis('off')
                 
-                ax.text(0.5, 0.95, f"Laporan Hasil {instrument['title']['id']}", 
+                title_text = instrument.get('title', {}).get('id', 'Laporan')
+                ax.text(0.5, 0.95, f"Laporan Hasil {title_text}", 
                        fontsize=24, fontweight='bold', ha='center', va='top', transform=ax.transAxes, color='#2c3e50')
                 ax.text(0.5, 0.90, f"Tanggal: {datetime.now().strftime('%d %B %Y')}", 
                        fontsize=12, ha='center', va='top', transform=ax.transAxes, color='#7f8c8d')
                 ax.text(0.1, 0.80, "Ringkasan Hasil", fontsize=18, fontweight='bold', color='#2c3e50', transform=ax.transAxes)
-                ax.text(0.1, 0.75, f"Skor Total: {score['total']}/{score['max_score']}", 
+                ax.text(0.1, 0.75, f"Skor Total: {score.get('total', 0)}/{score.get('max_score', 0)}", 
                        fontsize=16, color='#e74c3c', fontweight='bold', transform=ax.transAxes)
-                ax.text(0.1, 0.70, f"Interpretasi: {interpretation['label']['id']}", 
-                       fontsize=16, color='#3498db', transform=ax.transAxes)
-                ax.text(0.1, 0.65, f"Deskripsi: {interpretation['description']['id']}", 
-                       fontsize=14, color='#34495e', wrap=True, transform=ax.transAxes)
+                
+                if isinstance(interpretation, dict):
+                    ax.text(0.1, 0.70, f"Interpretasi: {interpretation.get('label', {}).get('id', 'N/A')}", 
+                           fontsize=16, color='#3498db', transform=ax.transAxes)
+                    ax.text(0.1, 0.65, f"Deskripsi: {interpretation.get('description', {}).get('id', 'N/A')}", 
+                           fontsize=14, color='#34495e', wrap=True, transform=ax.transAxes)
+                
                 ax.add_patch(plt.Rectangle((0.05, 0.55), 0.9, 0.25, fill=False, edgecolor='#3498db', linewidth=2, transform=ax.transAxes))
                 ax.text(0.5, 0.05, "⚠️ Platform ini untuk tujuan edukatif dan skrining awal saja", 
                        fontsize=10, ha='center', va='bottom', transform=ax.transAxes, color='#7f8c8d', style='italic')
@@ -260,7 +280,7 @@ class MentalHealthScreeningApp:
                 pdf.savefig(fig, bbox_inches='tight')
                 plt.close(fig)
                 
-                # Page 2: Details
+                # Page 2
                 fig, ax = plt.subplots(figsize=(8.27, 11.69))
                 ax.axis('off')
                 ax.text(0.5, 0.95, "Detail Jawaban", fontsize=20, fontweight='bold', ha='center', va='top', transform=ax.transAxes, color='#2c3e50')
@@ -268,7 +288,7 @@ class MentalHealthScreeningApp:
                 y_pos = 0.90
                 for item_id, response in responses.items():
                     item_text = ""
-                    for item in instrument['items']:
+                    for item in instrument.get('items', []):
                         if item['id'] == item_id:
                             item_text = item['text']['id']
                             break
@@ -284,8 +304,7 @@ class MentalHealthScreeningApp:
                     ax.text(0.7, y_pos, f"Jawaban: {response}", fontsize=12, color='#e74c3c', fontweight='bold', transform=ax.transAxes)
                     y_pos -= 0.03
                 
-                if y_pos < 0.95:  # Save jika ada konten
-                    pdf.savefig(fig, bbox_inches='tight')
+                pdf.savefig(fig, bbox_inches='tight')
                 plt.close(fig)
             
             return tmp_file.name
@@ -357,19 +376,22 @@ class MentalHealthScreeningApp:
                                     Tarik Napas<br>4 detik
                                 </div>
                                 <div style='text-align: left; max-width: 300px; margin: 20px auto;'>
-                                    <p>1. Tarik napas selama 4 detik</p><p>2. Tahan napas selama 4 detik</p>
-                                    <p>3. Keluarkan napas selama 4 detik</p><p>4. Tahan kosong selama 4 detik</p>
+                                    <p>1. Tarik napas selama 4 detik</p>
+                                    <p>2. Tahan napas selama 4 detik</p>
+                                    <p>3. Keluarkan napas selama 4 detik</p>
+                                    <p>4. Tahan kosong selama 4 detik</p>
                                 </div>
                             </div>
                         """,
                         "478": """
                             <div style='text-align: center; padding: 30px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 12px; color: white;'>
                                 <h2 style='color: white; margin-bottom: 20px;'>🫁 4-7-8 Breathing</h2>
-                                <div style='width: 200px; height: 200px; border: 4px solid white; margin: 20px auto; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: bold;'>
+                                <div style='width: 200px; height: 200px; border: 4px solid white; margin: 20px auto; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: bold; text-align: center;'>
                                     Tarik Napas<br>4 detik
                                 </div>
                                 <div style='text-align: left; max-width: 300px; margin: 20px auto;'>
-                                    <p>1. Tarik napas selama 4 detik</p><p>2. Tahan napas selama 7 detik</p>
+                                    <p>1. Tarik napas selama 4 detik</p>
+                                    <p>2. Tahan napas selama 7 detik</p>
                                     <p>3. Keluarkan napas selama 8 detik</p>
                                 </div>
                             </div>
@@ -377,11 +399,12 @@ class MentalHealthScreeningApp:
                         "deep": """
                             <div style='text-align: center; padding: 30px; background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); border-radius: 12px; color: white;'>
                                 <h2 style='color: white; margin-bottom: 20px;'>🫁 Pernapasan Dalam</h2>
-                                <div style='width: 200px; height: 200px; border: 4px solid white; margin: 20px auto; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: bold;'>
+                                <div style='width: 200px; height: 200px; border: 4px solid white; margin: 20px auto; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: bold; text-align: center;'>
                                     Tarik Napas<br>Perlahan
                                 </div>
                                 <div style='text-align: left; max-width: 300px; margin: 20px auto;'>
-                                    <p>1. Tarik napas perlahan melalui hidung</p><p>2. Biarkan perut mengembang</p>
+                                    <p>1. Tarik napas perlahan melalui hidung</p>
+                                    <p>2. Biarkan perut mengembang</p>
                                     <p>3. Keluarkan napas perlahan melalui mulut</p>
                                 </div>
                             </div>
@@ -403,19 +426,24 @@ class MentalHealthScreeningApp:
                             <p style='text-align: center; color: #34495e; font-size: 18px; margin-bottom: 20px;'><strong>Gunakan indera Anda untuk kembali ke saat ini:</strong></p>
                             <div style='display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;'>
                                 <div style='background: rgba(52, 152, 219, 0.1); padding: 20px; border-radius: 8px; border-left: 4px solid #3498db;'>
-                                    <h3 style='color: #2980b9; margin-top: 0;'>👁️ 5 HAL YANG ANDA LIHAT</h3><p>Lihat sekeliling dan identifikasi 5 benda</p>
+                                    <h3 style='color: #2980b9; margin-top: 0;'>👁️ 5 HAL YANG ANDA LIHAT</h3>
+                                    <p style='color: #2c3e50;'>Lihat sekeliling dan identifikasi 5 benda</p>
                                 </div>
                                 <div style='background: rgba(46, 204, 113, 0.1); padding: 20px; border-radius: 8px; border-left: 4px solid #2ecc71;'>
-                                    <h3 style='color: #27ae60; margin-top: 0;'>👂 4 HAL YANG ANDA DENGAR</h3><p>Dengarkan dan identifikasi 4 suara</p>
+                                    <h3 style='color: #27ae60; margin-top: 0;'>👂 4 HAL YANG ANDA DENGAR</h3>
+                                    <p style='color: #2c3e50;'>Dengarkan dan identifikasi 4 suara</p>
                                 </div>
                                 <div style='background: rgba(155, 89, 182, 0.1); padding: 20px; border-radius: 8px; border-left: 4px solid #9b59b6;'>
-                                    <h3 style='color: #8e44ad; margin-top: 0;'>✋ 3 HAL YANG ANDA SENTUH</h3><p>Sentuh dan identifikasi 3 tekstur</p>
+                                    <h3 style='color: #8e44ad; margin-top: 0;'>✋ 3 HAL YANG ANDA SENTUH</h3>
+                                    <p style='color: #2c3e50;'>Sentuh dan identifikasi 3 tekstur</p>
                                 </div>
                                 <div style='background: rgba(241, 196, 15, 0.1); padding: 20px; border-radius: 8px; border-left: 4px solid #f1c40f;'>
-                                    <h3 style='color: #f39c12; margin-top: 0;'>👃 2 HAL YANG ANDA CIUM</h3><p>Cium dan identifikasi 2 bau</p>
+                                    <h3 style='color: #f39c12; margin-top: 0;'>👃 2 HAL YANG ANDA CIUM</h3>
+                                    <p style='color: #2c3e50;'>Cium dan identifikasi 2 bau</p>
                                 </div>
                                 <div style='background: rgba(230, 126, 34, 0.1); padding: 20px; border-radius: 8px; border-left: 4px solid #e67e22;'>
-                                    <h3 style='color: #d35400; margin-top: 0;'>👅 1 HAL YANG ANDA RASA</h3><p>Rasakan dan identifikasi 1 rasa</p>
+                                    <h3 style='color: #d35400; margin-top: 0;'>👅 1 HAL YANG ANDA RASA</h3>
+                                    <p style='color: #2c3e50;'>Rasakan dan identifikasi 1 rasa</p>
                                 </div>
                             </div>
                             <p style='text-align: center; color: #7f8c8d; font-style: italic; margin-top: 20px;'>Lakukan latihan ini perlahan dan fokus pada setiap indera</p>
@@ -516,20 +544,17 @@ class MentalHealthScreeningApp:
         
         return app
 
-# Production-ready launch
 if __name__ == "__main__":
     app = MentalHealthScreeningApp()
     interface = app.create_interface()
     
-    # Get port from environment (Render.com, Railway, etc)
     port = int(os.environ.get("PORT", 7860))
     
-    # Production config
     interface.launch(
         server_name="0.0.0.0",
         server_port=port,
         share=False,
         show_error=True,
-        enable_queue=True,  # Important for production
+        enable_queue=True,
         max_threads=10
     )
