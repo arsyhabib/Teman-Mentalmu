@@ -402,6 +402,15 @@ class MentalHealthScreeningApp:
             inputs=[instrument_choice],
             outputs=[assessment_area]
         )
+
+        def create_screening_interface(self):
+        """Create the screening interface tab - combines quick and full assessment"""
+        with gr.Tabs():
+            with gr.Tab("Skrining Cepat"):
+                self.create_quick_screening()
+            
+            with gr.Tab("Evaluasi Lengkap"):
+                self.create_full_assessment()
     
     def create_results_interface(self):
         """Create results and interpretation interface"""
