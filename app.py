@@ -3,6 +3,10 @@ import yaml
 import json
 import os
 from typing import Dict, List, Any
+from datetime import datetime
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_pdf import PdfPages
+import io
 
 class MentalHealthScreeningApp:
     def __init__(self):
@@ -125,40 +129,173 @@ class MentalHealthScreeningApp:
         submit_btn.click(process_quick_screening, inputs=inputs, outputs=[result_output])
     
     def create_full_assessment(self):
+        """Evaluasi lengkap yang benar-benar fungsional"""
         gr.Markdown("## 📋 Evaluasi Lengkap")
-        gr.Markdown("**Fitur ini sedang dalam pengembangan. Silakan gunakan Skrining Cepat.**")
         
-        with gr.Row():
-            phq9_chk = gr.Checkbox(label="PHQ-9 (Depresi)", value=False)
-            gad7_chk = gr.Checkbox(label="GAD-7 (Kecemasan)", value=False)
-            dass21_chk = gr.Checkbox(label="DASS-21 (Distress)", value=False)
-            cbi_chk = gr.Checkbox(label="CBI (Burnout)", value=False)
+        # Dropdown pemilihan instrumen
+        instrument_choice = gr.Dropdown(
+            choices=[
+                ("PHQ-9 (Depresi)", "phq9"),
+                ("GAD-7 (Kecemasan)", "gad7"),
+                ("DASS-21 (Distress)", "dass21"),
+                ("CBI (Burnout)", "cbi")
+            ],
+            label="Pilih instrumen evaluasi",
+            value="phq9"
+        )
         
-        generate_btn = gr.Button("Generate Form", variant="primary")
+        start_btn = gr.Button("Mulai Evaluasi", variant="primary")
+        
+        # Container untuk form dinamis
+        with gr.Column() as form_container:
+            form_blocks = []
+            item_ids_state = gr.State([])
+            current_instrument_state = gr.State("")
+        
+        submit_btn = gr.Button("📝 Kirim Evaluasi", variant="primary", visible=False)
         results_output = gr.HTML()
+        pdf_download = gr.File(label="Download Hasil PDF", visible=False)
         
-        def show_message(phq9, gad7, dass21, cbi):
-            if not any([phq9, gad7, dass21, cbi]):
-                return "<p style='color: #e74c3c;'>⚠️ Pilih minimal satu instrumen!</p>"
+        def generate_form(instrument_id):
+            if not instrument_id:
+                return [], [], "", gr.update(visible=False), "", None
             
-            selected = []
-            if phq9:
-                selected.append("PHQ-9")
-            if gad7:
-                selected.append("GAD-7")
-            if dass21:
-                selected.append("DASS-21")
-            if cbi:
-                selected.append("CBI")
+            instrument = self.instruments[instrument_id]
+            item_ids = []
+            components = []
             
-            return f"""
+            # Header instrumen
+            components.append(gr.Markdown(f"### {instrument['title']['id']}"))
+            components.append(gr.Markdown(f"<p style='color: #7f8c8d;'>{instrument['description']['id']}</p>"))
+            
+            # Buat radio button untuk setiap item
+            for item in instrument['items']:
+                item_ids.append(item['id'])
+                components.append(gr.Radio(
+                    choices=[(opt['label']['id'], opt['value']) for opt in item['options']],
+                    label=item['text']['id'],
+                    type="value"
+                ))
+            
+            components.append(gr.Markdown("<br>"))  # Spacer
+            
+            return components, item_ids, instrument_id, gr.update(visible=True), "", None
+        
+        def process_full_assessment(item_ids, current_instrument, *values):
+            if not item_ids or not current_instrument:
+                return "<p style='color: #e74c3c;'>⚠️ Form belum diisi lengkap!</p>", None
+            
+            responses_dict = dict(zip(item_ids, values))
+            score = self.calculate_score(current_instrument, responses_dict)
+            interpretation = self.get_interpretation(current_instrument, score)
+            
+            # Generate PDF
+            pdf_buffer = self.generate_pdf_report(current_instrument, score, interpretation, responses_dict)
+            
+            html = f"""
                 <div style='background-color: #d4edda; border: 1px solid #c3e6cb; border-radius: 8px; padding: 20px; margin-top: 20px;'>
-                    <h3 style='color: #155724;'>✅ Instrumen Terpilih: {', '.join(selected)}</h3>
-                    <p style='color: #155724;'>Implementasi scoring lengkap akan segera ditambahkan. Untuk saat ini, gunakan tab Skrining Cepat.</p>
+                    <h3 style='color: #155724;'>✅ Evaluasi Berhasil</h3>
+                    <h4>{self.instruments[current_instrument]['title']['id']}</h4>
+                    <p style='font-size: 20px;'><strong>Skor Total:</strong> <span style='color: #d32f2f;'>{score['total']}/{score['max_score']}</span></p>
+                    <p style='font-size: 16px;'><strong>Interpretasi:</strong> <span style='color: #388e3c;'>{interpretation['label']['id']}</span></p>
+                    <p style='color: #155724;'>{interpretation['description']['id']}</p>
                 </div>
             """
+            
+            return html, pdf_buffer
         
-        generate_btn.click(show_message, inputs=[phq9_chk, gad7_chk, dass21_chk, cbi_chk], outputs=[results_output])
+        start_btn.click(
+            generate_form,
+            inputs=[instrument_choice],
+            outputs=[form_container, item_ids_state, current_instrument_state, submit_btn, results_output, pdf_download]
+        )
+        
+        submit_btn.click(
+            process_full_assessment,
+            inputs=[item_ids_state, current_instrument_state] + [gr.State() for _ in range(50)],  # Max 50 items
+            outputs=[results_output, pdf_download]
+        )
+    
+    def generate_pdf_report(self, instrument_id: str, score: Dict, interpretation: Dict, responses: Dict) -> str:
+        """Generate PDF report and return file path"""
+        from matplotlib.backends.backend_pdf import PdfPages
+        import matplotlib.pyplot as plt
+        from datetime import datetime
+        import tempfile
+        
+        instrument = self.instruments[instrument_id]
+        
+        # Create temporary file
+        with tempfile.NamedTemporaryFile(mode='wb', suffix='.pdf', delete=False) as tmp_file:
+            with PdfPages(tmp_file) as pdf:
+                # Page 1: Title and Summary
+                fig, ax = plt.subplots(figsize=(8.27, 11.69))  # A4 size
+                ax.axis('off')
+                
+                # Title
+                ax.text(0.5, 0.95, f"Laporan Hasil {instrument['title']['id']}", 
+                       fontsize=24, fontweight='bold', ha='center', va='top',
+                       transform=ax.transAxes, color='#2c3e50')
+                
+                # Date
+                ax.text(0.5, 0.90, f"Tanggal: {datetime.now().strftime('%d %B %Y')}", 
+                       fontsize=12, ha='center', va='top', transform=ax.transAxes,
+                       color='#7f8c8d')
+                
+                # Score summary
+                ax.text(0.1, 0.80, "Ringkasan Hasil", fontsize=18, fontweight='bold',
+                       color='#2c3e50', transform=ax.transAxes)
+                
+                ax.text(0.1, 0.75, f"Skor Total: {score['total']}/{score['max_score']}", 
+                       fontsize=16, color='#e74c3c', fontweight='bold',
+                       transform=ax.transAxes)
+                
+                ax.text(0.1, 0.70, f"Interpretasi: {interpretation['label']['id']}", 
+                       fontsize=16, color='#3498db', transform=ax.transAxes)
+                
+                ax.text(0.1, 0.65, f"Deskripsi: {interpretation['description']['id']}", 
+                       fontsize=14, color='#34495e', wrap=True,
+                       transform=ax.transAxes)
+                
+                # Border
+                ax.add_patch(plt.Rectangle((0.05, 0.55), 0.9, 0.25, 
+                                          fill=False, edgecolor='#3498db', 
+                                          linewidth=2, transform=ax.transAxes))
+                
+                # Footer
+                ax.text(0.5, 0.05, "⚠️ Platform ini untuk tujuan edukatif dan skrining awal saja", 
+                       fontsize=10, ha='center', va='bottom', transform=ax.transAxes,
+                       color='#7f8c8d', style='italic')
+                
+                pdf.savefig(fig, bbox_inches='tight')
+                plt.close(fig)
+                
+                # Page 2: Detailed responses
+                fig, ax = plt.subplots(figsize=(8.27, 11.69))
+                ax.axis('off')
+                
+                ax.text(0.5, 0.95, "Detail Jawaban", fontsize=20, fontweight='bold', 
+                       ha='center', va='top', transform=ax.transAxes, color='#2c3e50')
+                
+                y_pos = 0.90
+                for item_id, response in responses.items():
+                    # Find item text
+                    item_text = ""
+                    for item in instrument['items']:
+                        if item['id'] == item_id:
+                            item_text = item['text']['id']
+                            break
+                    
+                    ax.text(0.1, y_pos, f"• {item_text}", fontsize=12, 
+                           color='#34495e', transform=ax.transAxes)
+                    ax.text(0.7, y_pos, f"Jawaban: {response}", fontsize=12, 
+                           color='#e74c3c', fontweight='bold', transform=ax.transAxes)
+                    y_pos -= 0.03
+                
+                pdf.savefig(fig, bbox_inches='tight')
+                plt.close(fig)
+            
+            return tmp_file.name
     
     def create_results_interface(self):
         gr.Markdown("## 📊 Hasil dan Interpretasi Multi-Standar")
