@@ -278,55 +278,58 @@ class MentalHealthScreeningApp:
             </div>
         """
     
-    def create_screening_interface(self):
-        """Create the main screening interface"""
-        with gr.Tabs():
-            with gr.Tab("Skrining Cepat"):
-                self.create_quick_screening()
-            
-            with gr.Tab("Evaluasi Lengkap"):
-                self.create_full_assessment()
-            
-            with gr.Tab("Asisten Panik"):
-                self.create_panic_assistant()
-            
-            with gr.Tab("Hasil & Interpretasi"):
-                self.create_results_interface()
-            
-            with gr.Tab("Edukasi"):
-                self.create_education_interface()
-    
-       def process_quick_screening(*values):
-        # Map data dari Gradio ke format yang dibutuhkan
-        item_ids = [item['id'] for item in instrument['items']]
-        responses_dict = dict(zip(item_ids, values))
+    def create_quick_screening(self):
+        """Create quick screening interface (PHQ-2)"""
+        instrument = self.instruments['phq2']
         
-        score = self.calculate_score('phq2', responses_dict)
-        interpretation = self.get_interpretation('phq2', score)
+        gr.Markdown(f"## {instrument['title']['id']}")
+        gr.Markdown(f"*{instrument['description']['id']}*")
+        gr.Markdown(f"**{instrument['timeframe']['id']}**")
         
-        html = f"""
-            <div style='padding: 20px; background-color: #F7FAFC; border-radius: 8px;'>
-                <h3>Hasil PHQ-2</h3>
-                <p><strong>Skor Total:</strong> {score['total']}/{score['max_score']}</p>
-                <p><strong>Interpretasi:</strong> {interpretation['label']['id']}</p>
-                <p><strong>Deskripsi:</strong> {interpretation['description']['id']}</p>
-        """
+        # Create input components
+        item_ids = []
+        inputs = []
+        for item in instrument['items']:
+            item_ids.append(item['id'])
+            inputs.append(gr.Radio(
+                choices=[(opt['label']['id'], opt['value']) for opt in item['options']],
+                label=item['text']['id'],
+                type="value"
+            ))
         
-        if score['total'] >= 3:
-            html += """
-                <div style='background-color: #FED7D7; border: 1px solid #FC8181; border-radius: 8px; padding: 15px; margin-top: 15px;'>
-                    <h4 style='color: #C53030;'>⚠️ Screening Positif</h4>
-                    <p>Hasil menunjukkan adanya gejala depresi yang memerlukan evaluasi lebih lanjut.</p>
-                    <p><strong>Rekomendasi:</strong> Lanjutkan ke PHQ-9 untuk evaluasi lengkap.</p>
-                </div>
+        submit_btn = gr.Button("Kirim Jawaban", variant="primary")
+        result_output = gr.HTML()
+        
+        def process_quick_screening(*values):
+            # Map positional arguments to item IDs
+            responses_dict = dict(zip(item_ids, values))
+            
+            score = self.calculate_score('phq2', responses_dict)
+            interpretation = self.get_interpretation('phq2', score)
+            
+            html = f"""
+                <div style='padding: 20px; background-color: #F7FAFC; border-radius: 8px;'>
+                    <h3>Hasil PHQ-2</h3>
+                    <p><strong>Skor Total:</strong> {score['total']}/{score['max_score']}</p>
+                    <p><strong>Interpretasi:</strong> {interpretation['label']['id']}</p>
+                    <p><strong>Deskripsi:</strong> {interpretation['description']['id']}</p>
             """
-        
-        html += "</div>"
-        return html
+            
+            if score['total'] >= 3:
+                html += """
+                    <div style='background-color: #FED7D7; border: 1px solid #FC8181; border-radius: 8px; padding: 15px; margin-top: 15px;'>
+                        <h4 style='color: #C53030;'>⚠️ Screening Positif</h4>
+                        <p>Hasil menunjukkan adanya gejala depresi yang memerlukan evaluasi lebih lanjut.</p>
+                        <p><strong>Rekomendasi:</strong> Lanjutkan ke PHQ-9 untuk evaluasi lengkap.</p>
+                    </div>
+                """
+            
+            html += "</div>"
+            return html
         
         submit_btn.click(
             process_quick_screening,
-            inputs=list(responses.values()),
+            inputs=inputs,
             outputs=[result_output]
         )
     
