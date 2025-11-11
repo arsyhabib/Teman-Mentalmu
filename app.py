@@ -1,4 +1,5 @@
-# KODE BERSIH - SALIN DARI SINI
+# KODE FINAL - SCREENING KESEHATAN MENTAL
+# Sudah diperbaiki untuk deployment & compatibility
 
 import gradio as gr
 import yaml
@@ -19,42 +20,41 @@ class MentalHealthScreeningApp:
         self.load_configs()
         
     def load_configs(self):
-        instruments_dir = "config/instruments"
-        scoring_dir = "config/scoring"
-        i18n_dir = "config/i18n"
+        # Create directories if not exist
+        for dir_path in ["config/instruments", "config/scoring", "config/i18n"]:
+            os.makedirs(dir_path, exist_ok=True)
         
-        os.makedirs(instruments_dir, exist_ok=True)
-        os.makedirs(scoring_dir, exist_ok=True)
-        os.makedirs(i18n_dir, exist_ok=True)
-        
-        if os.path.exists(instruments_dir):
-            for filename in os.listdir(instruments_dir):
+        # Load instruments
+        if os.path.exists("config/instruments"):
+            for filename in os.listdir("config/instruments"):
                 if filename.endswith('.yaml'):
                     try:
-                        with open(f"{instruments_dir}/{filename}", 'r', encoding='utf-8') as f:
+                        with open(f"config/instruments/{filename}", 'r', encoding='utf-8') as f:
                             config = yaml.safe_load(f)
                             if config and 'id' in config:
                                 self.instruments[config['id']] = config
                     except Exception as e:
                         print(f"Warning: Could not load {filename}: {e}")
         
-        if os.path.exists(scoring_dir):
-            for filename in os.listdir(scoring_dir):
+        # Load scoring configs
+        if os.path.exists("config/scoring"):
+            for filename in os.listdir("config/scoring"):
                 if filename.endswith('.yaml'):
                     try:
-                        with open(f"{scoring_dir}/{filename}", 'r', encoding='utf-8') as f:
+                        with open(f"config/scoring/{filename}", 'r', encoding='utf-8') as f:
                             config = yaml.safe_load(f)
                             if config:
                                 self.scoring_configs.update(config)
                     except Exception as e:
                         print(f"Warning: Could not load {filename}: {e}")
         
-        if os.path.exists(i18n_dir):
-            for filename in os.listdir(i18n_dir):
+        # Load translations
+        if os.path.exists("config/i18n"):
+            for filename in os.listdir("config/i18n"):
                 if filename.endswith('.json'):
                     try:
                         lang = filename.split('.')[0]
-                        with open(f"{i18n_dir}/{filename}", 'r', encoding='utf-8') as f:
+                        with open(f"config/i18n/{filename}", 'r', encoding='utf-8') as f:
                             self.i18n[lang] = json.load(f)
                     except Exception as e:
                         print(f"Warning: Could not load {filename}: {e}")
@@ -160,15 +160,31 @@ class MentalHealthScreeningApp:
         
         submit_btn.click(process_quick_screening, inputs=inputs, outputs=[result_output])
     
-<class 'gradio.layouts.column.Column'> Component with id 18 not a valid output component.
+    def create_full_assessment(self):
+        """Evaluasi lengkap - FIXED VERSION tanpa error Column"""
+        gr.Markdown("## 📋 Evaluasi Lengkap")
+        
+        instrument_choice = gr.Dropdown(
+            choices=[
+                ("PHQ-9 (Depresi)", "phq9"),
+                ("GAD-7 (Kecemasan)", "gad7"),
+                ("DASS-21 (Distress)", "dass21"),
+                ("CBI (Burnout)", "cbi")
+            ],
+            label="Pilih instrumen evaluasi",
+            value="phq9"
+        )
         
         start_btn = gr.Button("Mulai Evaluasi", variant="primary")
         
-        # Container untuk form dinamis
-        with gr.Column() as form_container:
-            dynamic_inputs = []
-            item_ids_state = gr.State([])
-            current_instrument_state = gr.State("")
+        # PRE-CREATE 20 radio buttons (cukup untuk sebagian besar instrumen)
+        radio_components = []
+        for i in range(20):
+            radio_components.append(gr.Radio(choices=[], label="", visible=False))
+        
+        # STATE storage
+        item_ids_state = gr.State([])
+        current_instrument_state = gr.State("")
         
         submit_btn = gr.Button("📝 Kirim Evaluasi", variant="primary", visible=False)
         results_output = gr.HTML()
@@ -176,29 +192,43 @@ class MentalHealthScreeningApp:
         
         def generate_form(instrument_id):
             if not instrument_id or instrument_id not in self.instruments:
-                return [], [], "", gr.update(visible=False), "", None
-            
+                # Return 20 invisible radios + empty states
+                updates = [gr.update(visible=False) for _ in range(20)]
+                updates.extend([[], ""])
+                return updates
+        
             instrument = self.instruments[instrument_id]
-            item_ids = []
-            components = []
+            items = instrument.get('items', [])
             
-            components.append(gr.Markdown(f"### {instrument['title']['id']}"))
-            components.append(gr.Markdown(f"<p style='color: #7f8c8d;'>{instrument['description']['id']}</p>"))
-            
-            for item in instrument.get('items', []):
-                item_ids.append(item['id'])
-                components.append(gr.Radio(
+            # Update hanya radio yang diperlukan
+            updates = []
+            for i, item in enumerate(items[:20]):
+                updates.append(gr.update(
+                    visible=True,
                     choices=[(opt['label']['id'], opt['value']) for opt in item.get('options', [])],
-                    label=item['text']['id']
+                    label=item['text']['id'],
+                    value=None
                 ))
             
-            components.append(gr.Markdown("<br>"))
-            return components, item_ids, instrument_id, gr.update(visible=True), "", None
+            # Sembunyikan sisanya
+            while len(updates) < 20:
+                updates.append(gr.update(visible=False))
+            
+            # Return 20 radios + item_ids + instrument_id
+            item_ids = [item['id'] for item in items]
+            updates.extend([item_ids, instrument_id])
+            return updates
+        
+        # OUTPUT LIST: 20 radios + 2 states
+        output_targets = []
+        output_targets.extend(radio_components)
+        output_targets.append(item_ids_state)
+        output_targets.append(current_instrument_state)
         
         start_btn.click(
             generate_form,
             inputs=[instrument_choice],
-            outputs=[form_container, item_ids_state, current_instrument_state, submit_btn, results_output, pdf_download]
+            outputs=output_targets
         )
         
         def process_full_assessment(item_ids, current_instrument, *values):
@@ -228,11 +258,27 @@ class MentalHealthScreeningApp:
             """
             return html, gr.update(value=pdf_buffer, visible=True)
         
-        # Bind submit button
+        # INPUTS: 2 states + 20 radios
+        input_targets = [item_ids_state, current_instrument_state]
+        input_targets.extend(radio_components)
+        
+        # OUTPUTS: HTML + File
+        output_targets = [results_output, pdf_download]
+        
         submit_btn.click(
             process_full_assessment,
-            inputs=[item_ids_state, current_instrument_state],
-            outputs=[results_output, pdf_download]
+            inputs=input_targets,
+            outputs=output_targets
+        )
+        
+        # SHOW submit button after form generated
+        def show_submit_button(item_ids):
+            return gr.update(visible=True) if item_ids else gr.update(visible=False)
+        
+        item_ids_state.change(
+            show_submit_button,
+            inputs=[item_ids_state],
+            outputs=[submit_btn]
         )
     
     def generate_pdf_report(self, instrument_id: str, score: Dict, interpretation: Dict, responses: Dict) -> str:
@@ -363,10 +409,8 @@ class MentalHealthScreeningApp:
                                     Tarik Napas<br>4 detik
                                 </div>
                                 <div style='text-align: left; max-width: 300px; margin: 20px auto;'>
-                                    <p>1. Tarik napas selama 4 detik</p>
-                                    <p>2. Tahan napas selama 4 detik</p>
-                                    <p>3. Keluarkan napas selama 4 detik</p>
-                                    <p>4. Tahan kosong selama 4 detik</p>
+                                    <p>1. Tarik napas selama 4 detik</p><p>2. Tahan napas selama 4 detik</p>
+                                    <p>3. Keluarkan napas selama 4 detik</p><p>4. Tahan kosong selama 4 detik</p>
                                 </div>
                             </div>
                         """,
@@ -377,8 +421,7 @@ class MentalHealthScreeningApp:
                                     Tarik Napas<br>4 detik
                                 </div>
                                 <div style='text-align: left; max-width: 300px; margin: 20px auto;'>
-                                    <p>1. Tarik napas selama 4 detik</p>
-                                    <p>2. Tahan napas selama 7 detik</p>
+                                    <p>1. Tarik napas selama 4 detik</p><p>2. Tahan napas selama 7 detik</p>
                                     <p>3. Keluarkan napas selama 8 detik</p>
                                 </div>
                             </div>
@@ -390,8 +433,7 @@ class MentalHealthScreeningApp:
                                     Tarik Napas<br>Perlahan
                                 </div>
                                 <div style='text-align: left; max-width: 300px; margin: 20px auto;'>
-                                    <p>1. Tarik napas perlahan melalui hidung</p>
-                                    <p>2. Biarkan perut mengembang</p>
+                                    <p>1. Tarik napas perlahan melalui hidung</p><p>2. Biarkan perut mengembang</p>
                                     <p>3. Keluarkan napas perlahan melalui mulut</p>
                                 </div>
                             </div>
@@ -495,9 +537,6 @@ class MentalHealthScreeningApp:
         .gradio-container { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         .header-gradient { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 12px; margin-bottom: 20px; text-align: center; color: white; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
         .emergency-banner { background: linear-gradient(45deg, #e74c3c, #c0392b); color: white; padding: 20px; border-radius: 12px; text-align: center; margin-top: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .tab-button { font-size: 16px !important; padding: 12px 24px !important; border-radius: 8px !important; transition: all 0.3s ease !important; margin: 0 5px !important; border: none !important; font-weight: 600 !important; }
-        .tab-button:not(.selected) { background: #f8f9fa !important; color: #495057 !important; }
-        .tab-button.selected { background: linear-gradient(45deg, #3498db, #2980b9) !important; color: white !important; box-shadow: 0 2px 8px rgba(52, 152, 219, 0.4); }
         """
         
         with gr.Blocks(theme=gr.themes.Soft(), css=css, title="Screening Kesehatan Mental") as app:
@@ -538,8 +577,8 @@ if __name__ == "__main__":
     port = int(os.environ.get("PORT", 7860))
     
     interface.launch(
-    server_name="0.0.0.0",
-    server_port=port,
-    share=False,
-    show_error=True
-)
+        server_name="0.0.0.0",
+        server_port=port,
+        share=False,
+        show_error=True
+    )
