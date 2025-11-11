@@ -1,0 +1,79 @@
+phq9:
+  severity_bands:
+    - range: [0, 4]
+      label:
+        id: "Minimal"
+        en: "Minimal depression"
+      description:
+        id: "Gejala depresi minimal atau tidak ada"
+        en: "Minimal or no depression symptoms"
+      color: "#D6F5E5"
+      risk_level: "low"
+    - range: [5, 9]
+      label:
+        id: "Ringan"
+        en: "Mild depression"
+      description:
+        id: "Gejala depresi ringan"
+        en: "Mild depression symptoms"
+      color: "#FFD9C7"
+      risk_level: "mild"
+    - range: [10, 14]
+      label:
+        id: "Sedang"
+        en: "Moderate depression"
+      description:
+        id: "Gejala depresi sedang"
+        en: "Moderate depression symptoms"
+      color: "#E8D8FF"
+      risk_level: "moderate"
+    - range: [15, 19]
+      label:
+        id: "Sedang-Berat"
+        en: "Moderately severe depression"
+      description:
+        id: "Gejala depresi sedang sampai berat"
+        en: "Moderately severe depression symptoms"
+      color: "#D8F0FF"
+      risk_level: "moderately_severe"
+    - range: [20, 27]
+      label:
+        id: "Berat"
+        en: "Severe depression"
+      description:
+        id: "Gejala depresi berat"
+        en: "Severe depression symptoms"
+      color: "#F7F1E5"
+      risk_level: "severe"
+  
+  crosswalk:
+    phq2:
+      "0-2": "minimal"
+      "3-6": "positive_screening"
+    
+    dass21_depression:
+      "0-9": "minimal"
+      "10-13": "mild"
+      "14-20": "moderate"
+      "21-27": "moderately_severe"
+      "28+": "severe"
+    
+    clinical_significance:
+      minimal:
+        monitoring: "routine"
+        follow_up: "optional"
+      mild:
+        monitoring: "enhanced"
+        follow_up: "recommended_2_weeks"
+      moderate:
+        monitoring: "intensive"
+        follow_up: "recommended_1_week"
+        intervention: "consider_professional_help"
+      moderately_severe:
+        monitoring: "intensive"
+        follow_up: "recommended_immediate"
+        intervention: "professional_help_recommended"
+      severe:
+        monitoring: "continuous"
+        follow_up: "immediate"
+        intervention: "professional_help_urgent"

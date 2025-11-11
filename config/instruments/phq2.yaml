@@ -1,0 +1,75 @@
+id: phq2
+title:
+  id: PHQ-2
+  en: PHQ-2 (Quick Depression Screening)
+description:
+  id: "Dua pertanyaan cepat untuk skrining depresi"
+  en: "Two quick questions for depression screening"
+timeframe:
+  id: "Dalam 2 minggu terakhir"
+  en: "Over the last 2 weeks"
+items:
+  - id: phq2_1
+    text:
+      id: "Kurang berminat atau bergairah dalam melakukan sesuatu"
+      en: "Little interest or pleasure in doing things"
+    options:
+      - value: 0
+        label:
+          id: "Tidak sama sekali"
+          en: "Not at all"
+      - value: 1
+        label:
+          id: "Beberapa hari"
+          en: "Several days"
+      - value: 2
+        label:
+          id: "Lebih dari separuh hari"
+          en: "More than half the days"
+      - value: 3
+        label:
+          id: "Hampir setiap hari"
+          en: "Nearly every day"
+  - id: phq2_2
+    text:
+      id: "Merasa sedih, murung, atau putus asa"
+      en: "Feeling down, depressed, or hopeless"
+    options:
+      - value: 0
+        label:
+          id: "Tidak sama sekali"
+          en: "Not at all"
+      - value: 1
+        label:
+          id: "Beberapa hari"
+          en: "Several days"
+      - value: 2
+        label:
+          id: "Lebih dari separuh hari"
+          en: "More than half the days"
+      - value: 3
+        label:
+          id: "Hampir setiap hari"
+          en: "Nearly every day"
+scoring:
+  type: sum
+  items: [phq2_1, phq2_2]
+  max_score: 6
+interpretation:
+  - range: [0, 2]
+    label:
+      id: "Minimal"
+      en: "Minimal depression"
+    description:
+      id: "Gejala depresi minimal atau tidak ada"
+      en: "Minimal or no depression symptoms"
+  - range: [3, 6]
+    label:
+      id: "Positif"
+      en: "Positive screening"
+    description:
+      id: "Memerlukan evaluasi lebih lanjut dengan PHQ-9"
+      en: "Requires further evaluation with PHQ-9"
+    action:
+      id: "Lanjutkan ke PHQ-9 untuk evaluasi lengkap"
+      en: "Proceed to PHQ-9 for full evaluation"
